@@ -11,6 +11,7 @@ class CustomList extends HTMLElement {
         super(...args);
         this.attachShadow({ mode: 'open' });
         const containerEl = document.createElement('div');
+
         this.shadowRoot.appendChild(containerEl);
     }
     connectedCallback() {
@@ -21,9 +22,14 @@ class CustomList extends HTMLElement {
     }
     render() {
         const data = this.getAttribute('data');
+        const containerEl = this.shadowRoot.querySelector('div');
+        const childs = Array.prototype.slice.call(containerEl.childNodes);
+        
+        for(let i = 0; i < childs.length; i++) {
+            containerEl.removeChild(childs[i]);
+        }
         
         if(data) { 
-            const containerEl = this.shadowRoot.querySelector('div');
             const splitedData = data.trim().split(",");
 
             splitedData.map(data => {
