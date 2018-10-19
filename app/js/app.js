@@ -1,13 +1,18 @@
-var el = document.createElement('custom-list');
-document.body.appendChild(el);
+const { Observable, fromEvent } = rxjs;
 
-el.setAttribute('data', [1,2,3,4,5].join(','));
+const attr$ = Observable.create(observer => {
+    const el = document.createElement('custom-list');
+    document.body.appendChild(el);
 
-el.addEventListener('onrendered', (ev) => {
-    console.log('<custom-list />::render');
+    el.setAttribute('data', [1,2,3,4,5].join(','));
+
+    el.addEventListener('onattributechanged', (ev) => {
+        observer.next(ev.detail);
+    });
 });
 
-el.addEventListener('onattributechanged', (ev) => {
-    const { attrName, newVal, oldVal } = ev.detail;
-    console.log(ev.detail);
+attr$.subscribe({
+    next: (e) => {
+        console.log(e);
+    }
 });
